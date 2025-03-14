@@ -1,0 +1,69 @@
+<!-- templates/admin.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+    <div class="admin-container">
+        <h1>Trang Quản Lý</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="mm4">
+            <a href="{{ url_for('logout') }}" class="btn btn-secondary mb-4">Đăng xuất</a>
+        </div>
+        
+        <div class="table-wrapper">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <span class="status {{ 'text-danger' if user.is_blocked else 'text-success' }}">
+                                {{ "Bị khóa" if user.is_blocked else "Hoạt động" }}
+                            </span>
+                            <td class="hanhdong">
+                                {% if not user.is_admin %}
+                                    <form method="POST" action="{{ url_for('block_user', user_id=user.id) }}" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-{{ 'success' if user.is_blocked else 'danger' }} me-2">
+                                            {{ "Mở khóa" if user.is_blocked else "Khóa" }}
+                                        </button>
+                                    </form>
+                                    <form method="POST" action="{{ url_for('reset_password', user_id=user.id) }}" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-warning">Reset mật khẩu</button>
+                                    </form>
+                                {% else %}
+                                    <span class="text-muted">Admin</span>
+                                {% endif %}
+                            </td>                            
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

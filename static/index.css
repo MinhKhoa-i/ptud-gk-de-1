@@ -1,0 +1,105 @@
+/* Reset mặc định */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #e0eafc, #cfdef3); /* Gradient nền nhẹ nhàng */
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh; /* Đảm bảo body chiếm toàn bộ chiều cao */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container chính */
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 40px; /* Tăng padding cho thoáng */
+    background-color: #fff;
+    border-radius: 12px; /* Bo góc mềm hơn */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Đổ bóng đậm hơn, tinh tế hơn */
+    text-align: center;
+    transition: transform 0.3s ease; /* Hiệu ứng nhẹ khi hover */
+}
+
+.container:hover {
+    transform: translateY(-5px); /* Nâng nhẹ container khi hover */
+}
+
+/* Tiêu đề */
+h1 {
+    font-size: 2.8rem; /* Tăng kích thước chữ */
+    margin-bottom: 30px; /* Khoảng cách dưới lớn hơn */
+    color: #2c3e50;
+    font-weight: 700; /* Đậm hơn */
+    letter-spacing: 1px; /* Giãn chữ nhẹ */
+    text-transform: uppercase; /* Chuyển thành chữ in hoa */
+}
+
+/* Khu vực chứa các liên kết */
+.auth-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Tăng khoảng cách giữa các phần tử */
+}
+
+/* Nút liên kết */
+.btn {
+    display: inline-block;
+    padding: 12px 28px; /* Tăng kích thước nút */
+    text-decoration: none;
+    color: #fff;
+    background-color: #3498db; /* Màu xanh chủ đạo */
+    border-radius: 8px; /* Bo góc mềm hơn */
+    font-size: 1.1rem; /* Tăng kích thước chữ */
+    font-weight: 500; /* Chữ đậm vừa phải */
+    text-transform: uppercase; /* Chữ in hoa */
+    letter-spacing: 0.5px; /* Giãn chữ nhẹ */
+    transition: all 0.3s ease; /* Hiệu ứng mượt cho tất cả thay đổi */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ cho nút */
+}
+
+.btn:hover {
+    background-color: #2980b9; /* Màu tối hơn khi hover */
+    transform: translateY(-2px); /* Nâng nhẹ khi hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Đổ bóng đậm hơn */
+}
+
+/* Dấu phân cách */
+.separator {
+    font-size: 1.5rem; /* Tăng kích thước */
+    color: #7f8c8d;
+    font-weight: 300; /* Nhẹ hơn để không quá nổi bật */
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 25px; /* Giảm padding nhưng vẫn thoáng */
+    }
+
+    h1 {
+        font-size: 2.2rem; /* Giảm kích thước chữ */
+    }
+
+    .btn {
+        padding: 10px 20px; /* Giảm kích thước nút */
+        font-size: 1rem;
+    }
+
+    .auth-links {
+        gap: 15px; /* Giảm khoảng cách */
+    }
+
+    .separator {
+        font-size: 1.2rem;
+    }
+}

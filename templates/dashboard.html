@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
+    <style>
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 500px;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .card h4 {
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+        .card p {
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+        .comment-section {
+            margin-top: 15px;
+            border-top: 1px solid #e0e0e0;
+            padding-top: 10px;
+        }
+        .comment {
+            background: #f9fafb;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .comment-form button {
+            padding: 8px 15px;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .comment-form button:hover {
+            background: #2980b9;
+        }
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Dashboard</h2>
+
+        <!-- Hiển thị thông báo -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <!-- Thông tin người dùng -->
+        <div class="user-info-card">
+            <div class="user-info-layout">
+                <div class="user-avatar">
+                    <img src="{{ url_for('static', filename='avatars/' + (user.avatar if user.avatar else 'default_avatar.png')) }}" alt="Avatar" class="avatar-image">
+                </div>
+                <div class="user-info-details">
+                    <h3>Xin chào, {{ user.username }}!</h3>
+                    <div class="user-info">
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>ID:</strong> {{ user.id }}</p>
+                        <p><strong>Trạng thái:</strong>
+                            <span class="status {{ 'text-danger' if user.is_blocked else 'text-success' }}">
+                                {{ "Bị khóa" if user.is_blocked else "Hoạt động" }}
+                            </span>
+                        </p>
+                        <p><strong>Vai trò:</strong> {{ "Admin" if user.is_admin else "Người dùng" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form đăng bài viết -->
+        <div class='post'>
+            <h4>Đăng bài viết mới</h4>
+            <form method="POST">
+                <div class="input_tieude">
+                    <input type="text" name="title" placeholder="Nhập tiêu đề" required>
+                </div>
+                <div class="Content">
+                    <textarea name="content" placeholder="Nhập nội dung" required></textarea>
+                    <button type="submit" name="submit_post">Đăng bài</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Danh sách bài viết dạng thẻ -->
+        <div class="cards-container">
+            {% for post in posts %}
+            <div class="card">
+                <img src="{{ post.image_url or url_for('static', filename='avatars/default_avatar.png') }}" alt="Post Image">
+                <h4>{{ post.title }}</h4>
+                <p>{{ post.content|truncate(100) }}</p> 
+                {% if post.user_id != current_user.id %}
+                <form method="post" action="{{ url_for('toggle_follow', post_id=post.id) }}">
+                    {% if post.followers.filter_by(user_id=current_user.id).first() %}
+                        <button class="btn btn-warning btn-sm" type="submit">Bỏ theo dõi</button>
+                    {% else %}
+                        <button class="btn btn-primary btn-sm" type="submit">Theo dõi</button>
+                    {% endif %}
+                </form>
+                {% endif %}
+                <div class="comment-section">
+                    <h5>Bình luận</h5>
+                    {% for comment in post.comments %}
+                    <div class="comment">
+                        <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+                        <small>{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                    </div>
+                    {% endfor %}
+                    <form method="POST" class="comment-form">
+                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                        <textarea name="comment_content" placeholder="Viết bình luận..." required></textarea>
+                        <button type="submit" name="submit_comment">Gửi</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Phân trang -->
+        {% if total_posts > 5 %}
+        <div class="pagination">
+            {% if pagination.has_prev %}
+                <a href="{{ url_for('dashboard', page=pagination.prev_num) }}" class="btn btn-pagination">« Trước</a>
+            {% endif %}
+            {% for page_num in pagination.iter_pages(left_edge=1, left_current=2, right_current=3, right_edge=1) %}
+                {% if page_num %}
+                    {% if page_num == pagination.page %}
+                        <span class="btn btn-pagination active">{{ page_num }}</span>
+                    {% else %}
+                        <a href="{{ url_for('dashboard', page=page_num) }}" class="btn btn-pagination">{{ page_num }}</a>
+                    {% endif %}
+                {% else %}
+                    <span class="btn btn-pagination">...</span>
+                {% endif %}
+            {% endfor %}
+            {% if pagination.has_next %}
+                <a href="{{ url_for('dashboard', page=pagination.next_num) }}" class="btn btn-pagination">Sau »</a>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <!-- Liên kết điều hướng -->
+        <div class="links">
+            {% if user.is_admin %}
+            <a href="{{ url_for('admin') }}" class="btn btn-admin">Quản lý người dùng (Admin)</a>
+            {% endif %}
+            <a href="{{ url_for('logout') }}" class="btn btn-logout">Đăng xuất</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
+    <title>Quản lý User</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Chào mừng</h1>
+        <p style="color: #7f8c8d; margin-bottom: 20px;">Đăng nhập hoặc đăng ký để bắt đầu</p> <!-- Dòng phụ tùy chọn -->
+        <div class="auth-links">
+            <a href="{{ url_for('login') }}" class="btn">Đăng nhập</a>
+            <span class="separator">|</span>
+            <a href="{{ url_for('register') }}" class="btn">Đăng ký</a>
+        </div>
+    </div>
+</body>
+</html>

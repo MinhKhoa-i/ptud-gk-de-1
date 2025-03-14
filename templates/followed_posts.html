@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Bài viết bạn đang theo dõi:</h3>
+    {% if posts %}
+        {% for post in posts %}
+        <div class="card my-3">
+            <img class="card-img-top" src="{{ post.image_url or 'https://picsum.photos/600/300' }}">
+            <div class="card-body">
+                <h5>{{ post.title }}</h5>
+                <p>{{ post.content }}</p>
+                <small>Tác giả: {{ post.user.username }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Bạn chưa theo dõi bài viết nào.</p>
+    {% endif %}
+</div>
+{% endblock %}

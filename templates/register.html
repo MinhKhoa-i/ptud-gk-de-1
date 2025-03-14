@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='register.css') }}">
+    <title>Đăng ký</title>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Đăng ký</h2>
+        <form method="POST">
+            <div class="input-group">
+                <input type="text" name="username" placeholder="Tên người dùng" required>
+            </div>
+            <div class="input-group">
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Mật khẩu" required>
+            </div>
+            <button type="submit">Đăng ký</button>
+        </form>
+        <p class="login-link">
+            <a href="{{ url_for('login') }}">Đã có tài khoản? Đăng nhập</a>
+        </p>
+    </div>
+</body>
+</html>

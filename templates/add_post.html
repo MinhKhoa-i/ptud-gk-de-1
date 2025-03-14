@@ -1,0 +1,33 @@
+<!-- templates/add_post.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Thêm bài viết</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Thêm bài viết mới</h2>
+
+    <!-- Hiển thị thông báo -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <div>
+            <label>Tiêu đề:</label><br>
+            <input type="text" name="title" required>
+        </div>
+        <div>
+            <label>Nội dung:</label><br>
+            <textarea name="content" required></textarea>
+        </div>
+        <button type="submit">Thêm bài viết</button>
+    </form>
+    <p><a href="{{ url_for('dashboard') }}">Quay lại Dashboard</a></p>
+</body>
+</html>

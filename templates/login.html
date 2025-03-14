@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login.css') }}">
+    <title>Đăng nhập</title>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Đăng nhập</h2>
+        <!-- Hiển thị thông báo -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" aria-label="Close">×</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form method="POST" class="form">
+            <div class="input-group">
+                <input type="email" name="email" placeholder="Email" class="input" required>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Mật khẩu" class="input" required>
+            </div>
+            <button type="submit" class="login-button">Đăng nhập</button>
+        </form>
+        <div class="register-link">
+            <span>Chưa có tài khoản? </span><a href="{{ url_for('register') }}">Đăng ký</a>
+        </div>
+    </div>
+</body>
+</html>
