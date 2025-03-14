@@ -4,8 +4,8 @@ Vương Nguyễn Minh Khoa - 22681791
 ### Cách 1: Chạy ứng dụng trên môi trường local
 1. **Clone repo** về máy:
    ```sh
-   git clone https://github.com/MinhKhoa-i/flask-tiny-app.git
-   cd flask-tiny-app
+   git clone https://github.com/MinhKhoa-i/ptud-gk-de-1.git
+   cd ptud-gk-de-1
    ```
 2. **Tạo môi trường ảo và cài đặt thư viện**:
    ```sh
